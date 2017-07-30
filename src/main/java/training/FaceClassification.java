@@ -5,8 +5,10 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 import org.opencv.objdetect.CascadeClassifier;
 import org.opencv.objdetect.HOGDescriptor;
+import org.springframework.core.io.ClassPathResource;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -32,12 +34,12 @@ public class FaceClassification {
         return map;
     }
 
-    public FaceClassification(int numFeatures, int size)
-    {
+    public FaceClassification(int numFeatures, int size)  {
        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
        this.classifier = new CascadeClassifier(this.getPath(
-               "/java/xml/haarcascade_frontalface_default.xml"
+               "haarcascade_frontalface_default.xml"
        ));
+
        this.svmClassifier = new LibSVM(numFeatures);
        this.size = size;
     }
@@ -47,14 +49,17 @@ public class FaceClassification {
         return Collections.unmodifiableMap(this.faces);
     }
 
-    public String getPath(String url)
-    {
-        try {
-            return new File(
-                    getClass().getResource(url).toURI()
-            ).getAbsolutePath();
-        } catch (URISyntaxException ex) {
-            System.err.println("Cant find file");
+    public String getPath(String url) {
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file;
+        try{
+            file = new File(
+                    classLoader.getResource(url).getFile()
+            );
+            return file.getAbsolutePath();
+        }catch (NullPointerException x){
+            System.err.println("no se encontro el archivo");
         }
 
         return null;

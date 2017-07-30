@@ -1,6 +1,5 @@
 package webservice;
 
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,7 +19,7 @@ public class LearnController {
     @RequestMapping("/learn")
     public Learn learn(){
         int size = 100;
-        this.classification = new FaceClassification(1728,size);
+        this.classification = new FaceClassification(1728, size);
         try {
             this.classification.facesTraining();
         } catch (URISyntaxException e) {
