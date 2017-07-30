@@ -36,7 +36,7 @@ public class FaceClassification {
     {
        System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
        this.classifier = new CascadeClassifier(this.getPath(
-               "/xml/haarcascade_frontalface_default.xml"
+               "/java/xml/haarcascade_frontalface_default.xml"
        ));
        this.svmClassifier = new LibSVM(numFeatures);
        this.size = size;
@@ -53,14 +53,16 @@ public class FaceClassification {
             return new File(
                     getClass().getResource(url).toURI()
             ).getAbsolutePath();
-        } catch (URISyntaxException ex) {}
+        } catch (URISyntaxException ex) {
+            System.err.println("Cant find file");
+        }
 
         return null;
     }
 
     public void facesTraining() throws URISyntaxException {
 
-        for (File folder : this.getFile("/testocv/image").listFiles()) {
+        for (File folder : this.getFile("/image").listFiles()) {
 
             if (folder.isDirectory()) {
 
